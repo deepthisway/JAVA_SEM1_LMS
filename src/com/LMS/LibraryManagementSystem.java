@@ -18,13 +18,12 @@ public class LibraryManagementSystem {
             System.out.println("3. Search books by author");
             System.out.println("4. Search books by genre");
             System.out.println("5. Add a user");
-            System.out.println("6. Calculate fine for a user");
-            System.out.println("7. Display all the users");
-            System.out.println("8. Borrow a book");
-            System.out.println("9. Exit");
+            System.out.println("6. Display all the users");
+            System.out.println("7. Borrow a book");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -43,15 +42,12 @@ public class LibraryManagementSystem {
                     addUser(library, scanner);
                     break;
                 case 6:
-                    calculateFine(library, scanner);
-                    break;
-                case 7:
                     displayUsers(library);
                     break;
-                case 8:
+                case 7:
                     borrowBook(library, scanner);
                     break;
-                case 9:
+                case 8:
                     System.out.println("Exiting the program. Goodbye!");
                     scanner.close();
                     System.exit(0);
@@ -63,12 +59,33 @@ public class LibraryManagementSystem {
 
     // Method to add a book to the library
     public static void addBook(Library library, Scanner scanner) {
+
         System.out.print("\nEnter the title of the book: ");
         String title = scanner.nextLine();
+        try {
+            if(title.isEmpty()) {
+                throw new CustomException("Title is empty!!");
+            }
+        }
+        // we have used custom exception here to be very specific about the exception being thrown.
+        catch (CustomException e)   {
+            System.out.println("Error: " + e.getMessage());
+        }
+
         System.out.print("Enter the author of the book: ");
         String author = scanner.nextLine();
+        try {
+            if(author.isEmpty()) {
+                throw new CustomException("Author can't be empty!!");
+            }
+        }   catch (CustomException e)   {
+            System.out.println("Error: " + e.getMessage());
+        }
+
         System.out.print("Enter the genre of the book (FICTION or NON_FICTION): ");
-        Genre genre = Genre.valueOf(scanner.nextLine().toUpperCase());
+        Genre genre = Genre.valueOf(scanner.nextLine().toUpperCase()); // This line of code reads input from the user using a
+        // Scanner object, converts it to uppercase, and then converts it
+        // to an enum value of the Genre enum type
         if (genre == Genre.FICTION) {
             System.out.print("Enter the subgenre of the book: ");
             String subgenre = scanner.nextLine();
@@ -88,7 +105,8 @@ public class LibraryManagementSystem {
     public static void searchByAuthor(Library library, Scanner scanner) {
         System.out.print("\nEnter the author's name: ");
         String author = scanner.nextLine();
-        List<Book> booksByAuthor = library.searchByAuthor(author);
+        List<Book> booksByAuthor = library.searchByAuthor(author); // This line of code retrieves a list of books
+                                                                    // authored by a specific author from the library's collection.
         if (booksByAuthor.isEmpty()) {
             System.out.println("No books found by author: " + author);
         } else {
@@ -120,32 +138,13 @@ public class LibraryManagementSystem {
         String name = scanner.nextLine();
         System.out.print("Enter the user ID: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character
+        scanner.nextLine();
         User user = new User(name, id);
         library.addUser(user);
         System.out.println("User added successfully!");
     }
 
-    // Method to calculate fine for a user
-    public static void calculateFine(Library library, Scanner scanner) {
-        System.out.print("\nEnter the user ID: ");
-        int userId = scanner.nextInt();
-        scanner.nextLine(); // Consume newline character
-        User user = null;
-        for (User u : library.getUsers()) {
-            if (u.getId() == userId) {
-                user = u;
-                break;
-            }
-        }
-        if (user != null) {
-            double fine = library.calculateFine(user);
-            System.out.println("Fine for user " + user.getName() + " (ID: " + user.getId() + "): $" + fine);
-        } else {
-            System.out.println("User not found with ID: " + userId);
-        }
-    }
-    // method to display all the users
+
     // Method to display all the users
     public static void displayUsers(Library library) {
         List<User> users = library.getUsers();
@@ -164,7 +163,7 @@ public class LibraryManagementSystem {
         scanner.nextLine(); // Consume newline character
         User user = new User(userName, userId);
 
-        // Add the user to the library (if not already added)
+        // this adds the user to the library (if not already added) when borrowing a book.
         library.addUser(user);
 
         System.out.print("Enter the title of the book to borrow: ");

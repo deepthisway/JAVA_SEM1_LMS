@@ -9,21 +9,19 @@ public class Library {
 
     // Constructor
     public Library() {
+        //initializes both lists as empty ArrayLists when a new Library object is created
         books = new ArrayList<>();
         users = new ArrayList<>();
     }
-
     public List<User> getUsers() {
         return users;
     }
-    // Method to add a book to the library
     public void addBook(Book book) {
+//        method allows adding a Book object to the library's collection of books
         books.add(book);
     }
 
-
-
-    // Method to display all books in the library
+    //prints details of all the books currently in the library's collection
     public void displayBooks() {
         System.out.println("Books in the Library:");
         for (Book book : books) {
@@ -58,12 +56,6 @@ public class Library {
         users.add(user);
     }
 
-    // Method to calculate fine charges for a user
-    public double calculateFine(User user) {
-        // Dummy implementation for demonstration
-        // Replace with actual fine calculation logic
-        return 0.0;
-    }
 
     // Method to get a book by its title
     public Book getBookByTitle(String title) {
@@ -89,10 +81,6 @@ public class Library {
             return;
         }
 
-
-
-        book.setBorrowed(true);
-//        user.addBorrowedBook(book);
         System.out.println("Book \"" + book.getTitle() + "\" successfully borrowed by user " + user.getName() + ".");
     }
 
