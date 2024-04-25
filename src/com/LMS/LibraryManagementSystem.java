@@ -5,11 +5,11 @@ import java.util.List;
 
 public class LibraryManagementSystem {
     public static void main(String[] args) {
-        // Create library object
+        // Create library object to use further
         Library library = new Library();
         Scanner scanner = new Scanner(System.in);
 
-        // Add books to the library
+
         System.out.println("Welcome to the Library Management System!");
         while (true) {
             System.out.println("\nChoose an option:");
@@ -63,22 +63,22 @@ public class LibraryManagementSystem {
         System.out.print("\nEnter the title of the book: ");
         String title = scanner.nextLine();
         try {
-            if(title.isEmpty()) {
+            if (title.isEmpty()) {
                 throw new CustomException("Title is empty!!");
             }
         }
         // we have used custom exception here to be very specific about the exception being thrown.
-        catch (CustomException e)   {
+        catch (CustomException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
         System.out.print("Enter the author of the book: ");
         String author = scanner.nextLine();
         try {
-            if(author.isEmpty()) {
+            if (author.isEmpty()) {
                 throw new CustomException("Author can't be empty!!");
             }
-        }   catch (CustomException e)   {
+        } catch (CustomException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
@@ -106,7 +106,7 @@ public class LibraryManagementSystem {
         System.out.print("\nEnter the author's name: ");
         String author = scanner.nextLine();
         List<Book> booksByAuthor = library.searchByAuthor(author); // This line of code retrieves a list of books
-                                                                    // authored by a specific author from the library's collection.
+        // authored by a specific author from the library's collection.
         if (booksByAuthor.isEmpty()) {
             System.out.println("No books found by author: " + author);
         } else {
@@ -169,13 +169,16 @@ public class LibraryManagementSystem {
         System.out.print("Enter the title of the book to borrow: ");
         String title = scanner.nextLine();
         Book book = library.getBookByTitle(title);
-        if (book != null) {
-            library.borrowBook2(user, book);
-            System.out.println("Book \"" + title + "\" successfully borrowed by user " + userName + " (ID: " + userId + ")");
-        } else {
-            System.out.println("Book \"" + title + "\" not found in the library.");
+        try {
+            if (book != null) {
+                library.borrowBook2(user, book);
+                System.out.println("Book \"" + title + "\" successfully borrowed by user " + userName + " (ID: " + userId + ")");
+            } else {
+                throw new CustomException("Book \"" + title + "\" not found in the library.");
+            }
+        } catch (CustomException e) {
+            System.out.println("Error: " + e.getMessage());
         }
+
     }
-
-
 }
