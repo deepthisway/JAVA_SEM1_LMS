@@ -2,6 +2,7 @@ package com.LMS;
 
 import java.util.Scanner;
 import java.util.List;
+import java.util.InputMismatchException;
 
 public class LibraryManagementSystem {
     public static void main(String[] args) {
@@ -58,6 +59,12 @@ public class LibraryManagementSystem {
     }
 
     // Method to add a book to the library
+    /* POLYMORPHISM
+    * invoking the addBook method, this method might be declared
+    * to accept a Book object. However, since FictionBook and NonFictionBook are subclasses of Book,
+    * you can pass objects of either type to this method due to polymorphism. The method will treat
+    * them as Book objects, allowing you to work with them interchangeably.
+    * */
     public static void addBook(Library library, Scanner scanner) {
 
         System.out.print("\nEnter the title of the book: ");
@@ -103,17 +110,33 @@ public class LibraryManagementSystem {
 
     // Method to search books by author
     public static void searchByAuthor(Library library, Scanner scanner) {
-        System.out.print("\nEnter the author's name: ");
-        String author = scanner.nextLine();
-        List<Book> booksByAuthor = library.searchByAuthor(author); // This line of code retrieves a list of books
-        // authored by a specific author from the library's collection.
-        if (booksByAuthor.isEmpty()) {
-            System.out.println("No books found by author: " + author);
-        } else {
-            System.out.println("Books by author " + author + ":");
-            for (Book book : booksByAuthor) {
-                System.out.println(book.getDetails());
+        try {
+            System.out.print("\nEnter the author's name: ");
+            String author = scanner.nextLine();
+            // Check if the input contains any digits
+            // The regular expression .*\\d.* matches any string that contains at least one digit (0-9) anywhere within it.
+            /*
+            *: This part of the regular expression matches any sequence of characters (including zero characters) in the input string.
+            \\d: This part of the regular expression matches any digit (0-9).
+            *: Similar to the first part, this matches any sequence of characters (including zero characters) after the digit.
+            */
+            if (author.matches(".*\\d.*")) {
+                throw new InputMismatchException("Author's name cannot contain numbers.");
             }
+            List<Book> booksByAuthor = library.searchByAuthor(author); // This line of code retrieves a list of books
+            // authored by a specific author from the library's collection.
+            if (booksByAuthor.isEmpty()) {
+                System.out.println("No books found by author: " + author);
+            } else {
+                System.out.println("Books by author " + author + ":");
+                for (Book book : booksByAuthor) {
+                    System.out.println(book.getDetails());
+                }
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Input error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 

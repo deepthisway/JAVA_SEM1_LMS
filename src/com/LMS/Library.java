@@ -17,7 +17,8 @@ public class Library {
         return users;
     }
     public void addBook(Book book) {
-//        method allows adding a Book object to the library's collection of books
+        // we will use this method further for assigning fiction and non-fiction books, allowing us to achieve polymorphism
+        //method allows adding a Book object to the library's collection of books
         books.add(book);
     }
 
